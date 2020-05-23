@@ -1,4 +1,4 @@
-package com.yueyang.rabbitmq.handler;
+package com.yueyang.rabbitmq.handler.facout;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;

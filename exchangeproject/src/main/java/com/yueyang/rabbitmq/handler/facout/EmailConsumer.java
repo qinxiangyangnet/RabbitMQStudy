@@ -1,4 +1,4 @@
-package com.yueyang.rabbitmq.handler;
+package com.yueyang.rabbitmq.handler.facout;
 
 import com.rabbitmq.client.*;
 import com.yueyang.rabbitmq.utils.RabbitMQUtils;
@@ -13,7 +13,6 @@ import java.io.IOException;
  **/
 public class EmailConsumer {
     private final static String EXCHANGE_NAME = "qinxiangyang_123456";
-
     private final static String QUEUE_NAME = "email_queue";
 
     public static void main(String[] args) throws Throwable {
