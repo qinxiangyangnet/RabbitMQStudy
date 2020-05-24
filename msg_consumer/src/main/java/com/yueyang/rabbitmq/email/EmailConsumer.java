@@ -32,7 +32,7 @@ public class EmailConsumer {
         System.out.println("messageId:" + messageId);
 
 //        if(messageId has  consumer){
-        //伪代码
+        //幂等性校验伪代码
 //            return;
 //        }
         JSONObject jsonObject = JSONObject.parseObject(msg);
@@ -45,6 +45,16 @@ public class EmailConsumer {
         if (retult == null) {
             throw new Exception("调用第三方接口异常");
         }
+
+        try {
+            int i = 1 / 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            //丢弃消息
+            channel.basicNack(message.getMessageProperties().getDeliveryTag(), false, false);
+
+        }
+
 
         // 手动ack
         Long deliveryTag = (Long) headers.get(AmqpHeaders.DELIVERY_TAG);

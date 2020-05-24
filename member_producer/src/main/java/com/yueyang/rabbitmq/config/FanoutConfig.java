@@ -4,6 +4,9 @@ import org.springframework.amqp.core.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @program: queueproject
  * @description:
@@ -12,6 +15,20 @@ import org.springframework.stereotype.Component;
  **/
 @Component
 public class FanoutConfig {
+    /**
+     * 定义死信队列相关信息
+     */
+    public final static String deadQueueName = "dead_queue";
+    public final static String deadRoutingKey = "dead_routing_key";
+    public final static String deadExchangeName = "dead_exchange";
+    /**
+     * 死信队列 交换机标识符
+     */
+    public static final String DEAD_LETTER_QUEUE_KEY = "x-dead-letter-exchange";
+    /**
+     * 死信队列交换机绑定键标识符
+     */
+    public static final String DEAD_LETTER_ROUTING_KEY = "x-dead-letter-routing-key";
 
     private String FANOUT_EMAIL_QUEUE = "new_fanout_email_queue";
     private String FANOUT_SMS_QUEUE = "new_fanout_sms_queue";
@@ -27,7 +44,15 @@ public class FanoutConfig {
      */
     @Bean
     public Queue fanoutEmailQueue() {
-        return new Queue(FANOUT_EMAIL_QUEUE);
+        //邮件队列绑定死信交换机，死信队列
+        Map<String, Object> args = new HashMap<>(2);
+        //绑定私信交换机
+        args.put(DEAD_LETTER_QUEUE_KEY, deadExchangeName);
+        args.put(DEAD_LETTER_ROUTING_KEY, deadRoutingKey);
+        Queue queue = new Queue(FANOUT_EMAIL_QUEUE, true, false, false, args);
+        return queue;
+
+        //return new Queue(FANOUT_EMAIL_QUEUE);
     }
 
 
@@ -66,6 +91,29 @@ public class FanoutConfig {
 
         return BindingBuilder.bind(fanoutEmailQueue).to(fanoutExchange);
     }
+
+
+    /**
+     * 配置死信队列
+     *
+     * @return
+     */
+    @Bean
+    public Queue deadQueue() {
+        Queue queue = new Queue(deadQueueName, true);
+        return queue;
+    }
+
+    @Bean
+    public DirectExchange deadExchange() {
+        return new DirectExchange(deadExchangeName);
+    }
+
+    @Bean
+    public Binding bindingDeadExchange(Queue deadQueue, DirectExchange deadExchange) {
+        return BindingBuilder.bind(deadQueue).to(deadExchange).with(deadRoutingKey);
+    }
+
     /**
      *     //定义topic交换机
      *    public TopicExchange fanoutExchange() {
