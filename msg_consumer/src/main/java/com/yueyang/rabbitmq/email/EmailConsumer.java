@@ -1,11 +1,16 @@
 package com.yueyang.rabbitmq.email;
 
 import com.alibaba.fastjson.JSONObject;
+import com.rabbitmq.client.Channel;
 import com.yueyang.rabbitmq.utils.HttpClientUtils;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.support.AmqpHeaders;
+import org.springframework.messaging.handler.annotation.Headers;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
 
 /**
  * @program: queueproject
@@ -20,7 +25,7 @@ public class EmailConsumer {
 
     //    @RabbitHandler()
     @RabbitListener(queues = "new_fanout_email_queue")
-    public void process(Message message) throws Exception {
+    public void process(Message message, @Headers Map<String, Object> headers, Channel channel) throws Exception {
 
         String messageId = message.getMessageProperties().getMessageId();
         String msg = new String(message.getBody(), "utf-8");
@@ -40,6 +45,11 @@ public class EmailConsumer {
         if (retult == null) {
             throw new Exception("调用第三方接口异常");
         }
+
+        // 手动ack
+        Long deliveryTag = (Long) headers.get(AmqpHeaders.DELIVERY_TAG);
+        // 手动签收
+        channel.basicAck(deliveryTag, false);
 
 
         System.out.println("调用第三方成功，result" + retult + "程序结束");

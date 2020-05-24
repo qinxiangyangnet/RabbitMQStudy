@@ -19,6 +19,9 @@ spring:
           max-attempts: 5
           ####重试间隔时间
           initial-interval: 3000
+          ####手动开启ack
+        acknowledge-mode: manual
+
 
 server:
   port: 8081
