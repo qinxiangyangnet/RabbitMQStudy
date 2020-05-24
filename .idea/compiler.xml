@@ -6,11 +6,13 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="exchangeproject" />
-        <module name="msg_consumer" />
-        <module name="member_producer" />
+        <module name="rabbitmq_dic" />
         <module name="queueproject" />
+        <module name="msg_consumer" />
+        <module name="exchangeproject" />
         <module name="otherProject" />
+        <module name="member_producer" />
+        <module name="rabbitmq_order" />
       </profile>
     </annotationProcessing>
   </component>
@@ -21,6 +23,8 @@
       <module name="msg_consumer" options="-parameters" />
       <module name="otherProject" options="-parameters" />
       <module name="queueproject" options="-parameters" />
+      <module name="rabbitmq_dic" options="-parameters" />
+      <module name="rabbitmq_order" options="-parameters" />
     </option>
   </component>
 </project>

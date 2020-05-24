@@ -13,6 +13,8 @@
         <module>member_producer</module>
         <module>msg_consumer</module>
         <module>otherProject</module>
+        <module>rabbitmq_order</module>
+        <module>rabbitmq_dic</module>
     </modules>
 
     <parent>
