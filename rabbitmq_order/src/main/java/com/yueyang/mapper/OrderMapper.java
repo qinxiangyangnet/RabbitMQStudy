@@ -15,7 +15,7 @@ public interface OrderMapper {
 
 	@Select("SELECT id as id ,name as name ,order_createtime AS orderCreatetime,order_state as "
 			+ "orderState , order_money as orderMoney, "
-			+ " commodity_id as commodityid ,orderId as orderId from order_info where orderId=#{orderId};")
+			+ " commodity_id as commodityid ,orderId as orderId from orderinfo where orderId=#{orderId};")
 	public OrderEntity findOrderId(@Param("orderId") String orderId);
 
 }

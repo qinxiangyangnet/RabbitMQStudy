@@ -25,6 +25,7 @@ public class OrderService extends BaseApiService implements RabbitTemplate.Confi
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
+    @Transactional
     public ResponseBase addOrderAndDispatch() {
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.setName("蚂蚁课堂永久会员充值");
@@ -48,6 +49,9 @@ public class OrderService extends BaseApiService implements RabbitTemplate.Confi
         }
         // 2.使用消息中间件将参数存在派单队列中
         send(orderId);
+
+        //模拟生产者发送消息报错
+        int i=1/0;
         return setResultSuccess();
     }
 
